@@ -1,109 +1,71 @@
+using System;
+using System.Windows.Forms;
+
 namespace WinFormsLab
 {
     public partial class Form1 : Form
     {
-        public Form1()
-        {
-            InitializeComponent();
-        }
         double firstValue = 0;
         string value = "";
         private string currentOperator = "";
 
-        private void button1_Click(object sender, EventArgs e)
+        public Form1()
         {
-            value = value + "1";
+            InitializeComponent();
+        }
+
+        private void button_Click(object sender, EventArgs e)
+        {
+            value += (sender as Button).Text;
             wynikBox.Text = value;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonAdd_Click(object sender, EventArgs e) => SetOperator("+");
+        private void buttonSub_Click(object sender, EventArgs e) => SetOperator("-");
+        private void buttonMultiply_Click(object sender, EventArgs e) => SetOperator("*");
+        private void buttonDivide_Click(object sender, EventArgs e) => SetOperator("/");
+
+        private void SetOperator(string op)
         {
-            value = value + "2";
-            wynikBox.Text = value;
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            value = value + "3";
-            wynikBox.Text = value;
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            value = value + "4";
-            wynikBox.Text = value;
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            value = value + "5";
-            wynikBox.Text = value;
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            value = value + "6";
-            wynikBox.Text = value;
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            value = value + "7";
-            wynikBox.Text = value;
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            value = value + "8";
-            wynikBox.Text = value;
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            value = value + "9";
-            wynikBox.Text = value;
-        }
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            value = value + "0";
-            wynikBox.Text = value;
-        }
-
-        private void buttonAdd_Click(object sender, EventArgs e)
-        {
-
-
-            if (firstValue == 0)
+            if (!string.IsNullOrEmpty(value))
             {
-                firstValue = double.Parse(value);
+                if (!string.IsNullOrEmpty(currentOperator))
+                {
+                    // Perform the calculation with the current operator before setting the new one
+                    Calculate();
+                }
+                else
+                {
+                    firstValue = double.Parse(value);
+                }
                 value = "";
             }
-            else
+            currentOperator = op;
+        }
+
+        private void buttonEquals_Click(object sender, EventArgs e) => Calculate();
+
+        private void Calculate()
+        {
+            if (string.IsNullOrEmpty(value)) return;
+            double secondValue = double.Parse(value);
+            switch (currentOperator)
             {
-                double secondValue = double.Parse(value);
-                firstValue += secondValue;
-                value = firstValue.ToString();
-
+                case "+": firstValue += secondValue; break;
+                case "-": firstValue -= secondValue; break;
+                case "*": firstValue *= secondValue; break;
+                case "/": firstValue /= secondValue; break;
             }
-            wynikBox.Text = value;
-            currentOperator = "+";
-
+            wynikBox.Text = firstValue.ToString();
+            value = "";
         }
 
-        private void buttonSub_Click(object sender, EventArgs e)
+        private void buttonClear_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void buttonMultiply_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonDivide_Click(object sender, EventArgs e)
-        {
-
+            value = "";
+            firstValue = 0;
+            wynikBox.Text = "";
+            currentOperator = "";
         }
     }
 }
